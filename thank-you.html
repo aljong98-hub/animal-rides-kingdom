@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You | Animal Rides Kingdom</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <main class="thanks">
+    <div>
+      <img src="images/logo.png" alt="Animal Rides Kingdom">
+      <h1 id="thanks-title">Thank you, we got it! 👑</h1>
+      <p id="thanks-text">Your booking request is on its way to the Kingdom. We'll be in touch soon to confirm the details. Need us sooner? Call or text (506) 233-7577.</p>
+      <div class="thanks-actions">
+        <a href="#" class="btn btn-yellow" id="downloadWaiver" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+          Download my signed waiver
+        </a>
+        <a href="index.html" class="btn btn-primary">Back to Home</a>
+      </div>
+    </div>
+  </main>
+  <script>
+    if (new URLSearchParams(location.search).get('form') === 'waiver') {
+      document.getElementById('thanks-title').textContent = 'Waiver received! 👑';
+      document.getElementById('thanks-text').textContent = "Thanks for signing. You're all set to ride. See you at the party!";
+      try {
+        const saved = JSON.parse(sessionStorage.getItem('arkWaiverPdf'));
+        if (saved && saved.data) {
+          const link = document.getElementById('downloadWaiver');
+          link.href = saved.data;
+          link.download = saved.name;
+          link.hidden = false;
+          fetch(saved.data).then(r => r.blob()).then(b => { link.href = URL.createObjectURL(b); }).catch(() => {});
+          document.getElementById('thanks-text').textContent += ' Want a copy for your records? Download it below.';
+        }
+      } catch (e) { /* no saved copy */ }
+    }
+  </script>
+</body>
+</html>
